@@ -1,0 +1,45 @@
+4 August 2022
+
+The demultiplexed, gzipped .fastq files are here: /projects/bgmp/shared/2017_sequencing/demultiplexed/
+
+My assignments are listed in /projects/bgmp/shared/Bi622/QAA_data_assignments.txt:
+Rachel  23_4A_control_S17_L008  22_3H_both_S16_L008
+
+module load fastqc/0.11.5
+
+fastqc -t 4
+
+Fastqc runtime for 3 files:
+Command being timed: "fastqc -t 4 /projects/bgmp/shared/2017_sequencing/demultiplexed/23_4A_control_S17_L008_R1_001.fastq.gz /projects/bgmp/shared/2017_sequencing/demultiplexed/23_4A_control_S18_L008_R2_001.fastq.gz /projects/bgmp/shared/2017_sequencing/demultiplexed/22_3H_both_S16_L008_R1_001.fastq.gz /projects/bgmp/shared/2017_sequencing/demultiplexed/22_3H_both_S16_L008_R2_001.fastq.gz -o /projects/bgmp/rferina/bioinfo/Bi622/QAA/fastqc_outputs"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 4:59.19
+
+Fastqc runtime for 1 file:
+Command being timed: "fastqc /projects/bgmp/shared/2017_sequencing/demultiplexed/23_4A_control_S17_L008_R2_001.fastq.gz -o /projects/bgmp/rferina/bioinfo/Bi622/QAA/fastqc_outputs"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 4:16.21
+
+to see results of fastqc:
+ unzip 22_3H_both_S16_L008_R2_001_fastqc.zip 
+
+My demux script runtimes:
+22 read 1:
+Command being timed: "./demux_qs_processing.py -r 101 -f /projects/bgmp/shared/2017_sequencing/demultiplexed/22_3H_both_S16_L008_R1_001.fastq.gz -g 22_3H_L008_R1_001_dist.png"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:10.56
+
+22 read 2:
+Command being timed: "./demux_qs_processing.py -r 101 -f /projects/bgmp/shared/2017_sequencing/demultiplexed/22_3H_both_S16_L008_R2_001.fastq.gz -g 22_3H_L008_R2_001_dist.png"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:09.84
+
+23 read 1:
+Command being timed: "./demux_qs_processing.py -r 101 -f /projects/bgmp/shared/2017_sequencing/demultiplexed/23_4A_control_S17_L008_R1_001.fastq.gz -g 23_4A_L008_R1_001_dist.png"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 12:59.02
+
+23 read 2:
+Command being timed: "./demux_qs_processing.py -r 101 -f /projects/bgmp/shared/2017_sequencing/demultiplexed/23_4A_control_S17_L008_R2_001.fastq.gz -g 23_4A_L008_R2_001_dist.png"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 12:49.50
+
+Time difference between 22 and 23 makes sense, as the 23 files are larger
+wc -l 22_3H_both_S16_L008_R1_001.fastq.gz
+954639 22_3H_both_S16_L008_R1_001.fastq.gz
+
+wc -l 23_4A_control_S17_L008_R1_001.fastq.gz
+10058232 23_4A_control_S17_L008_R1_001.fastq.gz
