@@ -10,18 +10,18 @@
 written during the Bioinformatics and Genomics Program coursework.
 These functions will be useful on FASTA and FASTQ files.'''
 
-__version__ = "0.8"         # Read way more about versioning here:
+__version__ = "0.9"         # Read way more about versioning here:
                             # https://en.wikipedia.org/wiki/Software_versioning
 
 from lib2to3.pytree import convert
 from xmlrpc.client import boolean
 
-# add stuff here
-DNA_bases = ""
-RNA_bases = ""
+DNA_bases = "AGTCCCATGGCFCCNNA"
+RNA_bases = "UUACGAGGUUAUAGNU"
+
 
 def convert_phred(letter: str) -> int:
-    """Converts a single character into a phred score"""
+    """Inputs a single character, and returns it as a phred score."""
     return ord(letter) - 33
 
 
@@ -40,21 +40,21 @@ def qual_score(phred_score: str) -> float:
     return avg_phred
 
 
-def validate_base_seq(seq: str, RNAflag: bool) -> bool:
-    '''Takes in a string of DNA or RNA. Returns True if string is composed
-    of only As, Ts (or Us if RNAflag), Gs, Cs; otherwise false. Case insensitive.'''
+def validate_base_seq(seq: str, RNAflag: bool=False) -> bool:
+    '''Takes in a string of DNA or RNA. Returns True if string has
+    only As, Gs, Cs, Ns, and Ts (or Us if RNAflag), otherwise returns False. Case insensitive.'''
     # make sequence uppercase
     seq = seq.upper()
     # if the sequence isn't RNA, count AGTC and see if equal to length of sequence
-    if RNAflag is False:
-        if seq.count('A') + seq.count('G') + seq.count('T') + seq.count('C') == len(seq):
+    if RNAflag == False:
+        if seq.count('A') + seq.count('G') + seq.count('T') + seq.count('C') + seq.count('N') == len(seq):
             return True
     # if the sequence is RNA, count AGUC and see if equal to length of sequence
     else:
-        if seq.count('A') + seq.count('G') + seq.count('U') + seq.count('C') == len(seq):
+        if seq.count('A') + seq.count('G') + seq.count('U') + seq.count('C') + seq.count('N') == len(seq):
             return True
     return False
-# do default flag
+
 
 def gc_content(seq: str) -> float:
     '''Takes in a string (DNA). Returns GC content of the DNA sequence as a decimal between 0 and 1.'''
@@ -96,7 +96,7 @@ def oneline_fasta(file):
     return len(seq_dict)
 
 
-def reverse_complement(str):
+def reverse_complement(DNA_str: str) -> str:
     '''
     Takes in a string of a DNA sequence, and returns the reverse
     complement of the sequence in a new string. N's don't have
@@ -105,10 +105,10 @@ def reverse_complement(str):
     rev_str = ''
     comp_dict = {'G': 'C', 'C': 'G', 'A': 'T', 'T': 'A', 'N': 'N'}
     comp_list = []
-    position = len(str)
-    for nuc in range(len(str)):
+    position = len(DNA_str)
+    for nuc in range(len(DNA_str)):
         position -= 1
-        rev_str += str[position]
+        rev_str += DNA_str[position]
     for base in rev_str:
         comp_list.append(comp_dict[base])
     rev_comp = ''.join(comp_list)
@@ -126,9 +126,13 @@ if __name__ == "__main__":
     assert qual_score('HJIC2@JFFH$$') == 30.166666666666668, "qual_score produced incorrect average"
     print('passed qual_score test')
 
-    assert validate_base_seq("ACTCGCCT", False) == True, "Validate base seq does not work on DNA"
+    assert validate_base_seq("ACTCGCCT") == True, "Validate base seq does not work on DNA"
+    assert validate_base_seq("ACNNGCNT") == True, "Validate base seq does not work on DNA with N"
     assert validate_base_seq("UACAUG", True) == True, "Validate base seq does not work on RNA"
-    assert validate_base_seq("CTGUUA",False) == False, "Validate base seq worked on invalid sequence"
+    assert validate_base_seq("UANNNG", True) == True, "Validate base seq does not work on RNA with N"
+    assert validate_base_seq("CTGUUA") == False, "Validate base seq worked on invalid sequence"
+    assert validate_base_seq(DNA_bases) == False, 'Validate base seq does not work on DNA_bases'
+    assert validate_base_seq(RNA_bases, True) == True, 'Validate base seq does not work on RNA_bases'
     print('validate_base_seq passed DNA and RNA tests')
 
     assert gc_content("GCGCCCG") == 1
@@ -137,9 +141,9 @@ if __name__ == "__main__":
     assert gc_content("GCTATAAT") == 0.25
     print("gc_content passed GC content tests")
 
-    # file_fa = oneline_fasta('Danio_rerio.GRCz11.pep.all.fa')
-    # assert path.exists('fa_one_line.fa') == True, "fa_one_line_.fa file not created"
-    # print('oneline_fasta passed tests')
+    file_fa = oneline_fasta('Danio_rerio.GRCz11.pep.all.fa')
+    assert path.exists('fa_one_line.fa') == True, "fa_one_line_.fa file not created"
+    print('oneline_fasta passed tests')
 
     assert reverse_complement('GTAGCGTA') == 'TACGCTAC', 'Reverse complement is incorrect'
     assert reverse_complement('TGTTCCGT') == 'ACGGAACA', 'Reverse complement is incorrect'

@@ -21,7 +21,7 @@
 
 **R1:**
 **R2:**
-
+**option for paired end reads?**
 2. Try to determine what the adapters are on your own. If you cannot (or if you do, and want to confirm), click here to see the actual adapter sequences used. Sanity check: Use your Unix skills to search for the adapter sequences in your datasets and confirm the expected sequence orientations. Report the commands you used, the reasoning behind them, and how you confirmed the adapter sequences.
 
 **I confirmed the adapter sequence with**

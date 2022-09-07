@@ -1,9 +1,21 @@
-4 August 2022
+Rachel Ferina
 
-The demultiplexed, gzipped .fastq files are here: /projects/bgmp/shared/2017_sequencing/demultiplexed/
+python version: 3.10
+environment: QAA
+
+4 August 2022
 
 My assignments are listed in /projects/bgmp/shared/Bi622/QAA_data_assignments.txt:
 Rachel  23_4A_control_S17_L008  22_3H_both_S16_L008
+
+The demultiplexed, gzipped .fastq files are here: /projects/bgmp/shared/2017_sequencing/demultiplexed/
+22_3H_both_S16_L008_R1_001.fastq.gz
+22_3H_both_S16_L008_R2_001.fastq.gz
+23_4A_control_S17_L008_R1_001.fastq.gz
+23_4A_control_S17_L008_R2_001.fastq.gz
+
+
+My repository is located at  /projects/bgmp/rferina/bioinfo/Bi622/QAA
 
 module load fastqc/0.11.5
 
@@ -43,3 +55,174 @@ wc -l 22_3H_both_S16_L008_R1_001.fastq.gz
 
 wc -l 23_4A_control_S17_L008_R1_001.fastq.gz
 10058232 23_4A_control_S17_L008_R1_001.fastq.gz
+
+18 August 2022
+
+Created QAA environment.
+conda create --name QAA python=3.10
+conda activate QAA
+
+Installed all the programs needed for subsequent parts into QAA environment, checked that the versions were correct.
+conda install cutadapt
+cutadapt --version
+4.1
+
+conda install trimmomatic
+trimmomatic -version
+0.39
+
+conda install star
+conda install numpy
+conda install pysam
+conda install matplotlib
+conda install htseq
+
+htseq: module load easybuild 
+ You will need to load all module(s) on any one of the lines below before the "HTSeq/0.9.1-Python-3.6.1" module is available to load.
+
+      easybuild  icc/2017.1.132-GCC-6.3.0-2.27  impi/2017.1.132
+      easybuild  ifort/2017.1.132-GCC-6.3.0-2.27  impi/2017.1.132
+      eb-hide/1  icc/2017.1.132-GCC-6.3.0-2.27  impi/2017.1.132
+      eb-hide/1  ifort/2017.1.132-GCC-6.3.0-2.27  impi/2017.1.132
+
+
+31 August 2022
+
+cd fastqc_outputs/22_3H_both_S16_L008_R1_001_fastqc/
+
+
+
+seq len distribution should change after fastqc 
+
+RNA seq data should have duplicated seq in data bc expression Levels
+Overrepresented seq = adapter
+
+
+grep seq with most common adapters
+
+confirmed adapters by grepping for the seq in the original files. Had to use zgrep to grep in zipped files.
+
+**22 R1:**
+Read 1 adapter:
+ zgrep -c "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA" 22_3H_both_S16_L008_R1_001.fastq.gz
+7563
+Read 2 adapter:
+ zgrep -c "AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT" 22_3H_both_S16_L008_R1_001.fastq.gz
+0
+wc -l 22_3H_both_S16_L008_R1_001.fastq.gz
+954639 22_3H_both_S16_L008_R1_001.fastq.gz
+
+**22 R2:**
+Read 1:
+zgrep -c "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA" 22_3H_both_S16_L008_R2_001.fastq.gz
+0
+Read 2:
+zgrep -c "AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT" 22_3H_both_S16_L008_R2_001.fastq.gz
+7848
+1086026 22_3H_both_S16_L008_R2_001.fastq.gz
+
+**23 R1:**
+Read 1:
+zgrep -c "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA" 23_4A_control_S17_L008_R1_001.fastq.gz
+43466
+Read 2:
+zgrep -c "AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT" 23_4A_control_S17_L008_R1_001.fastq.gz
+0
+10058232 23_4A_control_S17_L008_R1_001.fastq.gz
+
+**23 R2**
+Read 1:
+zgrep -c "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA" 23_4A_control_S17_L008_R2_001.fastq.gz
+0
+Read 2:
+zgrep -c "AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT" 23_4A_control_S17_L008_R2_001.fastq.gz
+46541
+wc -l 23_4A_control_S17_L008_R2_001.fastq.gz
+10526263 23_4A_control_S17_L008_R2_001.fastq.gz
+
+223H R1 and R2:
+>>Overrepresented sequences	pass
+>>END_MODULE
+
+234A R1
+>>Overrepresented sequences	warn
+#Sequence	Count	Percentage	Possible Source
+CTTTTACTTCCTCTAGATAGTCAAGTTCGACCGTCTTCTCAGCGCTCCGC	58423	0.1318706509692221	No Hit
+ACGACTTTTACTTCCTCTAGATAGTCAAGTTCGACCGTCTTCTCAGCGCT	47785	0.10785887504175201	No Hit
+
+234A R2
+>>Overrepresented sequences	warn
+#Sequence	Count	Percentage	Possible Source
+CCTGCCAGTAGCATATGCTTGTCTCAAAGATTAAGCCATGCATGTCTAAG	123071	0.27779218604715833	No Hit
+CCTCACCCGGCCCGGACACGGACAGGATTGACAGATTGATAGCTCTTTCT	110993	0.25053008512104596	No Hit
+CTGCCAGTAGCATATGCTTGTCTCAAAGATTAAGCCATGCATGTCTAAGT	51625	0.11652640837146483	No Hit
+GGAGTCTAACGCGTGCGCGAGTCAGGGGCTCGTCCGAAAGCCGCCGTGGC	48033	0.10841865323596263	No Hit
+CTCACCCGGCCCGGACACGGACAGGATTGACAGATTGATAGCTCTTTCTC	47887	0.1080891063958225	No Hit
+
+fastqc gave overrepresented sequences, called it __ adapter; larger in fastqc--tells me more than .1% total and matches illumina adapter
+comes after adapter, illumina will tell us its gone
+
+5 Sept 2022
+
+cutadapt on 22
+
+ran trimmomatic, had to specify directories
+
+accidentally wrote to paired file twice, had to rerun
+
+6 Sept 2022
+
+Ensembl.org → Downloads → FTP Downloads → Mouse → copied link address for DNA FASTA primary assembly and for GTF. Both are release 107.
+
+Made dre directory for data, added the data on talapas /projects/bgmp/rferina/bioinfo/Bi622/QAA/dre.
+
+wget http://ftp.ensembl.org/pub/release-107/fasta/mus_musculus/dna/Mus_musculus.GRCm39.dna.primary_assembly.fa.gz
+wget http://ftp.ensembl.org/pub/release-107/gtf/mus_musculus/Mus_musculus.GRCm39.107.gtf.gz
+
+Made directory for STAR database: Mus_musculus.GRCm39.ens107.STAR2.7.10a
+
+Tried to make database, forgot the input files have to be unzipped:
+EXITING because of INPUT ERROR: the file format of the genomeFastaFile: /projects/bgmp/rferina/bioinfo/Bi622/QAA/dre/Mus_musculus.GRCm39.dna.primary_assembly.fa.gz is not fasta: the first character is '' (31), not '>'.
+ Solution: check formatting of the fasta file. Make sure the file is uncompressed (unzipped).
+
+Unzipped them with gunzip and reran, made the database.
+
+Aligned the paired read trimmomatic outputs to the mouse database.
+
+!!!!! WARNING:  Could not ls 2_r1
+
+EXITING: because of fatal INPUT file error: could not open read file: 2_r1
+SOLUTION: check that this file exists and has read permision.
+
+changed from 22_r1 to r1_22 for variable name and it worked!
+
+Ran parse_sam.py to count the number of mapped and unmapped reads.
+
+Tried to load htseq to see the documentation with -h; learned I had to specify htseq-count -h to see it. 
+
+7 September 2022
+
+Worked on distribution graphs, learned it doesn't like variables starting with numbers:
+SyntaxError: invalid decimal literal
+
+Had to use gzip.open to avoid this error:
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0x8b in position 1: invalid start byte
+
+Had to decode lines by opening in 'rt' because of gzip.open
+TypeError: a bytes-like object is required, not 'str'
+
+Running htseq:
+Format not recognized for output count file: txt
+  [Exception type: ValueError, raised in utils.py:371]
+Command exited with non-zero status 1
+
+Htseq-count:
+version 2.0.2.
+
+count mapped/total
+ICA4
+
+unstranded twice as many reads??
+
+trimmed prop divide by # records
+2.7 showing what was trimemd from 2.5
