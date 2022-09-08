@@ -88,17 +88,28 @@ htseq: module load easybuild
 
 31 August 2022
 
-cd fastqc_outputs/22_3H_both_S16_L008_R1_001_fastqc/
 
+RNA seq data should have duplicated seq in data bc different expression Levels
+Overrepresented seq could be adapters.
+223H R1 and R2:
+>>Overrepresented sequences	pass
+>>END_MODULE
 
+234A R1
+>>Overrepresented sequences	warn
+#Sequence	Count	Percentage	Possible Source
+CTTTTACTTCCTCTAGATAGTCAAGTTCGACCGTCTTCTCAGCGCTCCGC	58423	0.1318706509692221	No Hit
+ACGACTTTTACTTCCTCTAGATAGTCAAGTTCGACCGTCTTCTCAGCGCT	47785	0.10785887504175201	No Hit
 
-seq len distribution should change after fastqc 
+234A R2
+>>Overrepresented sequences	warn
+#Sequence	Count	Percentage	Possible Source
+CCTGCCAGTAGCATATGCTTGTCTCAAAGATTAAGCCATGCATGTCTAAG	123071	0.27779218604715833	No Hit
+CCTCACCCGGCCCGGACACGGACAGGATTGACAGATTGATAGCTCTTTCT	110993	0.25053008512104596	No Hit
+CTGCCAGTAGCATATGCTTGTCTCAAAGATTAAGCCATGCATGTCTAAGT	51625	0.11652640837146483	No Hit
+GGAGTCTAACGCGTGCGCGAGTCAGGGGCTCGTCCGAAAGCCGCCGTGGC	48033	0.10841865323596263	No Hit
+CTCACCCGGCCCGGACACGGACAGGATTGACAGATTGATAGCTCTTTCTC	47887	0.1080891063958225	No Hit
 
-RNA seq data should have duplicated seq in data bc expression Levels
-Overrepresented seq = adapter
-
-
-grep seq with most common adapters
 
 confirmed adapters by grepping for the seq in the original files. Had to use zgrep to grep in zipped files.
 
@@ -140,31 +151,10 @@ zgrep -c "AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT" 23_4A_control_S17_L008_R2_001.fastq
 wc -l 23_4A_control_S17_L008_R2_001.fastq.gz
 10526263 23_4A_control_S17_L008_R2_001.fastq.gz
 
-223H R1 and R2:
->>Overrepresented sequences	pass
->>END_MODULE
-
-234A R1
->>Overrepresented sequences	warn
-#Sequence	Count	Percentage	Possible Source
-CTTTTACTTCCTCTAGATAGTCAAGTTCGACCGTCTTCTCAGCGCTCCGC	58423	0.1318706509692221	No Hit
-ACGACTTTTACTTCCTCTAGATAGTCAAGTTCGACCGTCTTCTCAGCGCT	47785	0.10785887504175201	No Hit
-
-234A R2
->>Overrepresented sequences	warn
-#Sequence	Count	Percentage	Possible Source
-CCTGCCAGTAGCATATGCTTGTCTCAAAGATTAAGCCATGCATGTCTAAG	123071	0.27779218604715833	No Hit
-CCTCACCCGGCCCGGACACGGACAGGATTGACAGATTGATAGCTCTTTCT	110993	0.25053008512104596	No Hit
-CTGCCAGTAGCATATGCTTGTCTCAAAGATTAAGCCATGCATGTCTAAGT	51625	0.11652640837146483	No Hit
-GGAGTCTAACGCGTGCGCGAGTCAGGGGCTCGTCCGAAAGCCGCCGTGGC	48033	0.10841865323596263	No Hit
-CTCACCCGGCCCGGACACGGACAGGATTGACAGATTGATAGCTCTTTCTC	47887	0.1080891063958225	No Hit
-
-fastqc gave overrepresented sequences, called it __ adapter; larger in fastqc--tells me more than .1% total and matches illumina adapter
-comes after adapter, illumina will tell us its gone
 
 5 Sept 2022
 
-cutadapt on 22
+Ran cutadapt
 
 ran trimmomatic, had to specify directories
 
@@ -215,25 +205,18 @@ Running htseq:
 Format not recognized for output count file: txt
   [Exception type: ValueError, raised in utils.py:371]
 Command exited with non-zero status 1
+Had to change to tsv output file and it worked.
 
 Htseq-count:
 version 2.0.2.
 
-count mapped/total
-ICA4
 
-unstranded twice as many reads??
-
-trimmed prop divide by # records
-2.7 showing what was trimemd from 2.5
-
-wouldn't allow formatting or captioning for FastQc plots
+wouldn't allow formatting or captioning for FastQc plots, had to change to knitr::include_graphics.
 ![22r1_quality](22r1_per_base_quality.png)
 
-cutadapt out file to see trimmed results
+looked at cutadapt output file to see trimmed results.
 
 Notes from Leslie's mini lecture on strandedness:
-
 normally only get
 5'   geneA------geneC- 3' (+ strand)
 3' -----geneB---geneD-5' (- strand)
@@ -267,12 +250,13 @@ not stranded = same percentages for yes and reverse bc doesnt matter which, 50/5
 
 if no they both count??
 
-read counts table ; table generator
 
-tried to add legend to graphs but it wouldn't clear
+Worked on pdf report.
 
+Tried to add legend to graphs but it wouldn't clear, even with
 plt.clf()
 plt.cla()
 plt.close()
 
-had to put graphs in separate scripts
+Had to put distribution graphs in separate scripts, ran out of time for argparse.
+
