@@ -226,3 +226,53 @@ unstranded twice as many reads??
 
 trimmed prop divide by # records
 2.7 showing what was trimemd from 2.5
+
+wouldn't allow formatting or captioning for FastQc plots
+![22r1_quality](22r1_per_base_quality.png)
+
+cutadapt out file to see trimmed results
+
+Notes from Leslie's mini lecture on strandedness:
+
+normally only get
+5'   geneA------geneC- 3' (+ strand)
+3' -----geneB---geneD-5' (- strand)
+
+genome FASTA and GTF file tells u which strand
+
+convention only draw 5'
+
+can't mix and match FASTA, has to match it
++ or - can change, so u must know and use correspodning GTF file
+
+if unstranded prep and read alinged to Gene A and Gene B and in middle of C and D don;t know
+if stranded, know gene C or D; if aligned to intron = unidentified gene or random transcription firing
+
+was lib stranded or not?
+we used htseq count to count which reads aligned to which features
+-stranded as no, yes, reverse
+(stranded no = same or opp strand of feature 50/50, on either strand if align with Gene A) (don't know what strand came from, have to count both as gene A)
+(stranded yes = 1st read on same strand 2nd read on opp strand geneA
+                                                                →  
+                                                                       ←)
+(stranded reverse = 1st on opp, 2nd on same as gene) geneA 
+                                                        ←
+                                                             
+                                                     →        
+                                                     
+percetnages diff for rev and yes; 5% ; = not counting same genes every time; percent should be closer if the same
+
+much higher count/perc diff = stranded
+not stranded = same percentages for yes and reverse bc doesnt matter which, 50/50
+
+if no they both count??
+
+read counts table ; table generator
+
+tried to add legend to graphs but it wouldn't clear
+
+plt.clf()
+plt.cla()
+plt.close()
+
+had to put graphs in separate scripts

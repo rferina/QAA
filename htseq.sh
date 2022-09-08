@@ -9,11 +9,7 @@
 #SBATCH --cpus-per-task=8    ### Number of cpus to be used
 #SBATCH --account=bgmp      ### Account used for job submission
 
-# import HTSeq
 conda activate QAA
-# module load easybuild
-# module load eb-hide/1 
-# module load HTSeq/0.9.1-Python-3.6.1
 
 file='/projects/bgmp/rferina/bioinfo/Bi622/QAA/23align_to_refAligned.out.sam'
 file22='/projects/bgmp/rferina/bioinfo/Bi622/QAA/22align_to_refAligned.out.sam'
