@@ -77,6 +77,9 @@ conda install pysam
 conda install matplotlib
 conda install htseq
 
+Htseq-count:
+version 2.0.2.
+
 htseq: module load easybuild 
  You will need to load all module(s) on any one of the lines below before the "HTSeq/0.9.1-Python-3.6.1" module is available to load.
 
@@ -84,6 +87,8 @@ htseq: module load easybuild
       easybuild  ifort/2017.1.132-GCC-6.3.0-2.27  impi/2017.1.132
       eb-hide/1  icc/2017.1.132-GCC-6.3.0-2.27  impi/2017.1.132
       eb-hide/1  ifort/2017.1.132-GCC-6.3.0-2.27  impi/2017.1.132
+
+Learned I don't load htseq-count this way--it should already be installed.
 
 
 31 August 2022
@@ -154,11 +159,26 @@ wc -l 23_4A_control_S17_L008_R2_001.fastq.gz
 
 5 Sept 2022
 
-Ran cutadapt
+Ran cutadapt.
+Command being timed: "cutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT -o /projects/bgmp/rferina/bioinfo/Bi622/QAA/cutadapt_outputs/23r1.fastq -p /projects/bgmp/rferina/bioinfo/Bi622/QAA/cutadapt_outputs/23r2.fastq /projects/bgmp/shared/2017_sequencing/demultiplexed/23_4A_control_S17_L008_R1_001.fastq.gz /projects/bgmp/shared/2017_sequencing/demultiplexed/23_4A_control_S17_L008_R2_001.fastq.gz"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 7:25.61
 
-ran trimmomatic, had to specify directories
+Command being timed: "cutadapt -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT -o /projects/bgmp/rferina/bioinfo/Bi622/QAA/cutadapt_outputs/22r1.fastq -p /projects/bgmp/rferina/bioinfo/Bi622/QAA/cutadapt_outputs/22r2.fastq /projects/bgmp/shared/2017_sequencing/demultiplexed/22_3H_both_S16_L008_R1_001.fastq.gz /projects/bgmp/shared/2017_sequencing/demultiplexed/22_3H_both_S16_L008_R2_001.fastq.gz"
+	
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:42.52
 
-accidentally wrote to paired file twice, had to rerun
+ran trimmomatic, had to specify directories.
+TrimmomaticPE: Started with arguments:
+ /projects/bgmp/rferina/bioinfo/Bi622/QAA/cutadapt_outputs/22r1.fastq /projects/bgmp/rferina/bioinfo/Bi622/QAA/cutadapt_outputs/22r2.fastq /projects/bgmp/rferina/bioinfo/Bi622/QAA/trimmomatic_outputs/22read1_forward_paired.fastq /projects/bgmp/rferina/bioinfo/Bi622/QAA/trimmomatic_outputs/22read1_forward_unpaired.fastq /projects/bgmp/rferina/bioinfo/Bi622/QAA/trimmomatic_outputs/22read2_reverse_paired.fastq /projects/bgmp/rferina/bioinfo/Bi622/QAA/trimmomatic_outputs/22read2_reverse_unpaired.fastq LEADING:3 TRAILING:3 SLIDINGWINDOW:5:15 MINLEN:35
+Quality encoding detected as phred33
+Input Read Pairs: 4050899 Both Surviving: 3901127 (96.30%) Forward Only Surviving: 145058 (3.58%) Reverse Only Surviving: 2876 (0.07%) Dropped: 1838 (0.05%)
+TrimmomaticPE: Completed successfully
+	Command being timed: "trimmomatic PE /projects/bgmp/rferina/bioinfo/Bi622/QAA/cutadapt_outputs/22r1.fastq /projects/bgmp/rferina/bioinfo/Bi622/QAA/cutadapt_outputs/22r2.fastq /projects/bgmp/rferina/bioinfo/Bi622/QAA/trimmomatic_outputs/22read1_forward_paired.fastq /projects/bgmp/rferina/bioinfo/Bi622/QAA/trimmomatic_outputs/22read1_forward_unpaired.fastq /projects/bgmp/rferina/bioinfo/Bi622/QAA/trimmomatic_outputs/22read2_reverse_paired.fastq /projects/bgmp/rferina/bioinfo/Bi622/QAA/trimmomatic_outputs/22read2_reverse_unpaired.fastq LEADING:3 TRAILING:3 SLIDINGWINDOW:5:15 MINLEN:35"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:08.52
+Command being timed: "pigz /projects/bgmp/rferina/bioinfo/Bi622/QAA/trimmomatic_outputs/22read1_forward_paired.fastq /projects/bgmp/rferina/bioinfo/Bi622/QAA/trimmomatic_outputs/22read1_forward_unpaired.fastq /projects/bgmp/rferina/bioinfo/Bi622/QAA/trimmomatic_outputs/22read2_reverse_paired.fastq /projects/bgmp/rferina/bioinfo/Bi622/QAA/trimmomatic_outputs/22read2_reverse_unpaired.fastq"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:15.60
+
+accidentally wrote to paired file twice, had to rerun trimmomatic.
 
 6 Sept 2022
 
@@ -185,6 +205,8 @@ EXITING: because of fatal INPUT file error: could not open read file: 2_r1
 SOLUTION: check that this file exists and has read permision.
 
 changed from 22_r1 to r1_22 for variable name and it worked!
+Command being timed: "STAR --runThreadN 8 --runMode genomeGenerate --genomeDir /projects/bgmp/rferina/bioinfo/Bi622/QAA/Mus_musculus.GRCm39.ens107.STAR2.7.10a --genomeFastaFiles /projects/bgmp/rferina/bioinfo/Bi622/QAA/dre/Mus_musculus.GRCm39.dna.primary_assembly.fa --sjdbGTFfile /projects/bgmp/rferina/bioinfo/Bi622/QAA/dre/Mus_musculus.GRCm39.107.gtf"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 15:12.81
 
 Ran parse_sam.py to count the number of mapped and unmapped reads.
 
@@ -207,11 +229,14 @@ Format not recognized for output count file: txt
 Command exited with non-zero status 1
 Had to change to tsv output file and it worked.
 
-Htseq-count:
-version 2.0.2.
+Command being timed: "htseq-count -r name -s reverse -c 22stranded_reverse_count.tsv /projects/bgmp/rferina/bioinfo/Bi622/QAA/22align_to_refAligned.out.sam /projects/bgmp/rferina/bioinfo/Bi622/QAA/dre/Mus_musculus.GRCm39.107.gtf"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 4:48.84
+Command being timed: "htseq-count -r name -s yes -c 23stranded_count.tsv /projects/bgmp/rferina/bioinfo/Bi622/QAA/23align_to_refAligned.out.sam /projects/bgmp/rferina/bioinfo/Bi622/QAA/dre/Mus_musculus.GRCm39.107.gtf"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 39:53.16
 
 
-wouldn't allow formatting or captioning for FastQc plots, had to change to knitr::include_graphics.
+Worked on pdf report in R. 
+R wouldn't allow formatting or captioning for FastQc plots, had to change to knitr::include_graphics.
 ![22r1_quality](22r1_per_base_quality.png)
 
 looked at cutadapt output file to see trimmed results.
@@ -243,7 +268,7 @@ we used htseq count to count which reads aligned to which features
                                                              
                                                      →        
                                                      
-percetnages diff for rev and yes; 5% ; = not counting same genes every time; percent should be closer if the same
+percentages diff for rev and yes; 5% ; = not counting same genes every time; percent should be closer if the same
 
 much higher count/perc diff = stranded
 not stranded = same percentages for yes and reverse bc doesnt matter which, 50/50
